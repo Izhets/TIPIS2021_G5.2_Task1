@@ -1,24 +1,19 @@
 package com.company;
 
-public class FasrFourierTransformation {
+public class FastFourierTransformation {
 
     private final int sampleRate = 100;
     final int someFuncSize = 100;
     float[] someFunc = new float[someFuncSize];
 
-
-    public FasrFourierTransformation() {
+    public FastFourierTransformation(int frequency) {
         for (int i = 0; i < someFunc.length; i++) {
-            someFunc[i] = someFun(i);
+            someFunc[i] = someFun(i, frequency);
         }
     }
 
-    private float someFun(int index) {
-        //final int amplitudeOfSecondHarmonic = 1;
-        final int frequencyOfFirstHarmonic = 2;
-        //final int frequencyOfSecondHarmonic = 880;
-
-        return (float)Math.cos((frequencyOfFirstHarmonic * 2 * Math.PI  * index ) / sampleRate);
+    private float someFun(int index, int frequency) {
+        return (float)Math.cos((frequency * 2 * Math.PI  * index ) / sampleRate);
     }
 
     private float cos(int index, int frequency, int sampleRate) {
@@ -46,16 +41,10 @@ public class FasrFourierTransformation {
 
     public float[] func (){
         float[] result;
-        long start = System.currentTimeMillis();
         result = dft(someFunc, sampleRate);
-        long finish = System.currentTimeMillis();
-        long timeConsumedMillis = finish - start;
-        System.out.println("Time's dft: " + timeConsumedMillis);
         float[] amplitude = new float[sampleRate/2];
         for (int i = 0; i < result.length / 2; i++) {
             amplitude[i] = (float)Math.sqrt(result[2*i]*result[2*i] + result[2*i+1]*result[2*i+1]);
-            System.out.println(i + ": " + "Projection on cos: " + result[2*i] + " Projection on sin: " + result[2*i + 1]
-                    + " amplitude: "+ amplitude[i] + "\n");
         }
         return amplitude;
     }
